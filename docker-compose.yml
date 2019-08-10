@@ -8,6 +8,8 @@ services:
       - ai
     ports:
       - "55000:80"
+    environment:
+      - MNIST_API_IP=ai
 
   ai:
     image: rootpia/mnist_ai:latest
