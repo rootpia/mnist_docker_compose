@@ -3,7 +3,7 @@ version: '2'
 services:
   front:
     image: rootpia/mnist_front:latest
-    container_name: mnist_front
+    container_name: front
     depends_on:
       - ai
     ports:
@@ -11,5 +11,4 @@ services:
 
   ai:
     image: rootpia/mnist_ai:latest
-    container_name: mnist_ai
-
+    container_name: ai
