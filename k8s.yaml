@@ -1,0 +1,76 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: mnist-ai
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mnist-ai
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: mnist-ai
+        image: rootpia/mnist_ai:latest
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mnist-ai
+spec:
+  ports:
+  - port: 5000
+  selector:
+    app: mnist-ai
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: mnist-front
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: mnist-front
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: mnist-front
+        image: rootpia/mnist_front:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: MNIST_API_IP
+          value: "mnist-ai"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mnist-front
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: mnist-front
