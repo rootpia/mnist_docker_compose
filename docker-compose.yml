@@ -11,6 +11,16 @@ services:
     environment:
       - MNIST_API_IP=ai
 
+  batch:
+    image: rootpia/mnist_batch:latest
+    container_name: batch
+    depends_on:
+      - ai
+    ports:
+      - "56000:80"
+    environment:
+      - MNIST_API_IP=ai
+
   ai:
     image: rootpia/mnist_ai:latest
     container_name: ai

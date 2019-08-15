@@ -77,3 +77,46 @@ spec:
   - port: 80
   selector:
     app: mnist-front
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: mnist-batch
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: mnist-batch
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: mnist-batch
+        image: rootpia/mnist_batch:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: MNIST_API_IP
+          value: "mnist-ai"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mnist-batch
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: mnist-batch
