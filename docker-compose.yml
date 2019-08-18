@@ -10,7 +10,6 @@ services:
       - "55000:80"
     environment:
       - MNIST_API_IP=ai
-      - RECOGNITION_NUM=1
 
   batch:
     image: rootpia/mnist_batch:latest
@@ -25,3 +24,5 @@ services:
   ai:
     image: rootpia/mnist_ai:latest
     container_name: ai
+    environment:
+      - RECOGNITION_NUM=1
