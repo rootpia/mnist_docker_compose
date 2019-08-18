@@ -16,6 +16,9 @@ spec:
         image: rootpia/mnist_ai:latest
         ports:
         - containerPort: 5000
+        env:
+        - name: RECOGNITION_NUM
+          value: "100"
         resources:
           requests:
             cpu: 250m
