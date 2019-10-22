@@ -18,10 +18,10 @@ spec:
         - containerPort: 5000
         env:
         - name: RECOGNITION_NUM
-          value: "100"
+          value: "1"
         resources:
           requests:
-            cpu: 250m
+            cpu: 400m
           limits:
             cpu: 500m
 ---
@@ -65,7 +65,7 @@ spec:
           requests:
             cpu: 250m
           limits:
-            cpu: 500m
+            cpu: 1000m
         env:
         - name: MNIST_API_IP
           value: "mnist-ai"
@@ -74,6 +74,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mnist-front
+  annotations:
+    service.beta.kubernetes.io/azure-dns-label-name: mnist-front
 spec:
   type: LoadBalancer
   ports:
@@ -117,6 +119,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mnist-batch
+  annotations:
+    service.beta.kubernetes.io/azure-dns-label-name: mnist-batch
 spec:
   type: LoadBalancer
   ports:

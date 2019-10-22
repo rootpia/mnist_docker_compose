@@ -6,6 +6,7 @@ services:
     container_name: front
     depends_on:
       - ai
+      - db
     ports:
       - "55000:80"
     environment:
@@ -26,3 +27,12 @@ services:
     container_name: ai
     environment:
       - RECOGNITION_NUM=1
+
+  db:
+    image: redis
+    container_name: db
+    volumes:
+      - ./data/redis:/data
+    command:
+      redis-server --appendonly yes
+
